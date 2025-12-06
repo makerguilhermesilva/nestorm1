@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="Missão Coral: um projeto que une ciência, tecnologia e natureza para explorar o fundo do mar. Entre dados e ondas, a vida marinha ganha voz." />
+  <title>Missão Coral: Descobrindo o Oceano com IA</title>
+  <style>
+    /* Reset mínimo */
+    :root{
+      --bg:#e6f7ff;
+      --panel:#ffffff;
+      --muted:#3b5866;
+      --accent:#0b6e8a;
+      --accent-2:#07a;
+      --card:#f7ffff;
+      --glass: rgba(255,255,255,0.6);
+      --shadow: 0 6px 18px rgba(4,23,33,0.12);
+      --focus: 3px solid rgba(11,110,138,0.18);
+      --radius:12px;
+      --transition:300ms cubic-bezier(.2,.9,.2,1);
+      color-scheme: light;
+    }
+    .dark{
+      --bg:#021826;
+      --panel:#022b38;
+      --muted:#bcd7e0;
+      --accent:#39d0ff;
+      --accent-2:#7ce0ff;
+      --card:#033544;
+      --glass: rgba(255,255,255,0.03);
+      --shadow: 0 8px 24px rgba(0,0,0,0.6);
+      --focus: 3px solid rgba(87, 4, 241, 0);
+      color-scheme: dark;
+    }
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;
+      background: linear-gradient(180deg,var(--bg),#cfeef9 40%);
+      color:var(--muted);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      transition:background var(--transition), color var(--transition);
+    }
+
+    a{color:var(--accent); text-decoration:none}
+    a:focus{outline:var(--focus); border-radius:6px}
+    header{
+      position:sticky; top:0; z-index:60;
+      backdrop-filter: blur(6px);
+      background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.25));
+      border-bottom:1px solid rgba(11,110,138,0.06);
+    }
+    .dark header{
+      background: linear-gradient(180deg, rgba(2,43,56,0.6), rgba(2,43,56,0.3));
+      border-bottom:1px solid rgba(7,120,160,0.08);
+    }
+    .container{
+      max-width:1100px; margin:0 auto; padding:16px;
+      display:flex; align-items:center; gap:12px; justify-content:space-between;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:48px; height:48px; border-radius:10px; flex-shrink:0;
+      display:grid; place-items:center; font-weight:700; color:white;
+      background: linear-gradient(135deg,var(--accent),var(--accent-2));
+      box-shadow: var(--shadow);
+    }
+    nav a{margin:0 6px; font-weight:600; color:var(--muted); padding:8px; border-radius:8px}
+    nav a:hover, nav a:focus{background:var(--glass); outline:none}
+    .controls{display:flex; gap:8px; align-items:center}
+
+    /* Hero */
+    main{max-width:1100px; margin:18px auto; padding:16px;}
+    .hero{
+      display:grid; grid-template-columns: 1fr 420px; gap:22px; align-items:center;
+      background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.6));
+      border-radius:var(--radius); padding:20px; box-shadow:var(--shadow);
+    }
+    .dark .hero{background: linear-gradient(180deg, rgba(2,43,56,0.45), rgba(2,43,56,0.25));}
+    .hero h1{margin:0;font-size:clamp(20px,3.2vw,34px); color:var(--accent-2)}
+    .hero p.lead{margin:8px 0 16px; font-size:1rem; font-weight:600; color:var(--muted)}
+    .hero .summary{margin-bottom:12px; color:var(--muted)}
+    .hero .actions{display:flex; gap:10px; flex-wrap:wrap}
+    button.cta{
+      padding:10px 14px; border-radius:10px; border:0; cursor:pointer;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:white; font-weight:700;
+      box-shadow: 0 6px 18px rgba(7,120,160,0.18);
+      transition: transform 180ms ease, box-shadow 180ms ease, opacity 200ms;
+    }
+    button.cta:active{transform:translateY(1px)}
+    button.ghost{
+      background:transparent; border:2px solid rgba(11,110,138,0.12); color:var(--muted); font-weight:700;
+    }
+    button:focus{outline:var(--focus);}
+
+    .hero-figure{
+      width:100%; height:100%; min-height:260px; border-radius:10px; overflow:hidden;
+      display:flex; align-items:center; justify-content:center; background:linear-gradient(180deg,#bfe9ff,#87d1ef);
+      position:relative;
+    }
+    .hero-figure img{width:100%; height:100%; object-fit:cover; display:block}
+    .hero-decor{position:absolute; inset:auto 12px 12px auto; background:var(--glass); padding:8px 10px; border-radius:10px; font-weight:600; font-size:12px}
+
+    /* Curiosidades */
+    .curiosidades{margin-top:18px; padding:18px; background:var(--card); border-radius:10px; box-shadow:var(--shadow)}
+    .curiosidades h2{margin-top:0}
+    .curios-list{display:flex; gap:12px; flex-wrap:wrap}
+    .cur-item{
+      flex:1 1 220px; display:flex; gap:12px; align-items:flex-start; padding:10px;
+      background:transparent; border-radius:10px;
+    }
+    .icon{
+      width:44px; height:44px; border-radius:8px; display:grid; place-items:center; font-size:20px; flex-shrink:0;
+      background:linear-gradient(135deg, rgba(255,255,255,0.6), rgba(255,255,255,0.1)); box-shadow: var(--shadow);
+    }
+    .dark .icon{background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));}
+    .cur-item p{margin:0; font-weight:600; color:var(--muted)}
+
+    /* Fatos/Ciência cards */
+    .fatos{display:grid; gap:12px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); margin-top:18px}
+    .card{background:var(--panel); padding:14px; border-radius:12px; box-shadow:var(--shadow); transition:transform var(--transition)}
+    .card:hover{transform:translateY(-6px)}
+    .card h3{margin:6px 0 10px; color:var(--accent)}
+    .card p{margin:0; color:var(--muted)}
+
+    /* Galeria */
+    .galeria{margin-top:18px}
+    .grid{
+      display:grid; gap:10px; grid-template-columns: repeat(auto-fit, minmax(160px,1fr));
+    }
+    figure{margin:0; border-radius:10px; overflow:hidden; background:var(--card); box-shadow:var(--shadow); position:relative}
+    figure img{width:100%; height:160px; object-fit:cover; display:block}
+    figcaption{padding:8px; font-size:13px; color:var(--muted); background:linear-gradient(180deg, transparent, rgba(0,0,0,0.02));}
+
+    /* FAQ */
+    .faq{margin-top:18px; padding:16px; border-radius:12px; background:var(--panel); box-shadow:var(--shadow)}
+    details{margin-bottom:8px; background:var(--card); padding:10px; border-radius:8px}
+    summary{cursor:pointer; font-weight:700}
+
+    /* CTA final */
+    .cta-final{margin-top:18px; padding:18px; border-radius:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; background:linear-gradient(90deg, rgba(11,110,138,0.06), rgba(7,120,160,0.03))}
+    .cta-final a{background:var(--accent); color:white; padding:10px 14px; border-radius:10px; font-weight:700}
+
+    footer{margin-top:22px; padding:18px; text-align:center; color:var(--muted)}
+    .top-link{display:inline-block; margin-left:12px}
+
+    /* small screens */
+    @media (max-width:900px){
+      .hero{grid-template-columns:1fr; padding:14px}
+      .hero-figure{min-height:220px}
+    }
+
+    /* focus visible */
+    :focus{outline-offset:3px}
+    /* keyboard friendly */
+    .sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+    /* subtle animation */
+    .fade-in{animation:fadeIn 720ms ease both}
+    @keyframes fadeIn{from{opacity:0; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+  </style>
+    <!-- Bibliotecas -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.8.0/dist/tf.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header role="banner" aria-label="Cabeçalho do site Missão Coral">
+    <div class="container">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">MC</div>
+        <div>
+          <div style="font-weight:800">Missão Coral</div>
+          <div style="font-size:12px;color:var(--muted)">Descobrindo o Oceano com IA</div>
+        </div>
+      </div>
+
+      <nav role="navigation" aria-label="Navegação principal">
+        <a href="#curiosidades">Curiosidades</a>
+        <a href="#fatos">Fatos</a>
+        <a href="#galeria">Galeria</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <div class="controls" aria-hidden="false">
+        <button id="themeToggle" title="Alternar modo claro/escuro" aria-pressed="false" aria-label="Alternar modo claro e escuro">🌓</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="hero-title">
+      <div>
+        <h1 id="hero-title">Missão Coral: Descobrindo o Oceano com IA</h1>
+        <p class="lead">Entre dados e ondas, a vida marinha ganha voz.</p>
+        <p class="summary">Um projeto que une ciência, tecnologia e natureza para explorar o fundo do mar.</p>
+
+        <div class="actions" role="group" aria-label="Ações principais">
+          <button id="abrirIA" class="cta" aria-label="Iniciar reconhecimento facial">Reconhecimento Facial</button>
+          <button id="btnAbrirChatbot" class="ghost" aria-label="Abrir chatbot" aria-controls="chatbotPanel" aria-expanded="false">Abrir Chatbot</button>
+        </div>
+
+        <p style="margin-top:14px;font-size:13px;color:var(--muted)"><strong>Nota:</strong> Os dados desse projeto foram coletados pelos alunos por meio de pesquisas a fontes confiáveis, elas se encontram no final da página</p>
+      </div>
+
+      <figure class="hero-figure fade-in" role="img" aria-label="Imagem hero do fundo do mar">
+        <!-- TODO: substitua [[URL_IMAGEM_HERO]] pelo caminho/URL real da imagem hero -->
+        <img src="https://i0.wp.com/olharoceanografico.com/wp-content/uploads/2021/03/onda-bonita.jpg?resize=500%2C500&ssl=1" alt="Visão do fundo do mar com recifes de coral — imagem representativa do projeto" />
+        <div class="hero-decor">Explorar • Identificar • Preservar</div>
+      </figure>
+    </section>
+
+<!-- CURIOSIDADES -->
+<section id="curiosidades" class="curiosidades" aria-labelledby="curiosidades-title">
+  <h2 id="curiosidades-title">Curiosidades</h2>
+  <p style="margin-top:0;margin-bottom:12px;color:var(--muted)">
+    Pequenas surpresas do oceano que inspiram a Missão Coral. Clique nos ícones para ver detalhes.
+  </p>
+
+  <div class="curios-list" role="list">
+
+    <a href="templates/curiosidade_1.html" class="cur-item" role="listitem" tabindex="0" style="text-decoration:none;color:inherit">
+      <div class="icon" aria-hidden="true">🐚</div>
+      <p><strong>Os corais são animais</strong> — não plantas — e respiram de verdade através de trocas gasosas.</p>
+    </a>
+
+    <a href="templates/curiosidade_2.html" class="cur-item" role="listitem" tabindex="0" style="text-decoration:none;color:inherit">
+      <div class="icon" aria-hidden="true">🤖</div>
+      <p><strong>A IA ajuda na identificação</strong> de novas espécies a partir de imagens subaquáticas.</p>
+    </a>
+
+    <a href="templates/curiosidade_3.html" class="cur-item" role="listitem" tabindex="0" style="text-decoration:none;color:inherit">
+      <div class="icon" aria-hidden="true">🌊</div>
+      <p><strong>Apenas 5%</strong> do oceano foi explorado pelo ser humano!</p>
+    </a>
+
+    <a href="templates/curiosidade_4.html" class="cur-item" role="listitem" tabindex="0" style="text-decoration:none;color:inherit">
+      <div class="icon" aria-hidden="true">🏺</div>
+      <p><strong>O oceano tem mais artefatos históricos</strong> do que todos os museus do mundo.</p>
+    </a>
+
+  </div>
+</section>
+
+
+    <!-- FATOS/CIÊNCIA -->
+    <section id="fatos" class="fatos" aria-labelledby="fatos-title">
+      <h2 id="fatos-title">Fatos & Ciência</h2>
+
+      <article class="card" role="article" aria-labelledby="card1-title">
+        <h3 id="card1-title">Preservação inteligente</h3>
+        <p>Uso de sensores e modelos para mapear áreas críticas de recifes e priorizar ações de conservação.</p>
+      </article>
+
+      <article class="card" role="article" aria-labelledby="card2-title">
+        <h3 id="card2-title">IA debaixo d'água</h3>
+        <p>Algoritmos treinados com imagens subaquáticas detectam sinais de stress nos corais e espécies pouco conhecidas.</p>
+      </article>
+
+      <article class="card" role="article" aria-labelledby="card3-title">
+        <h3 id="card3-title">Mapeamento de habitats</h3>
+        <p>Técnicas de visão computacional e fotogrametria ajudam a reconstruir habitats e estimar biodiversidade.</p>
+      </article>
+    </section>
+
+<!-- GALERIA -->
+<section id="galeria" class="galeria" aria-labelledby="galeria-title">
+  <h2 id="galeria-title">Animais Marinhos em Extinção 🚨</h2>
+  <p style="color:var(--muted)">Quando um animal desaparece, não é apenas uma espécie que se perde — é uma parte da história do planeta que deixamos de contar.</p>
+
+  <div class="grid" role="list">
+
+    <a href="templates/baleia_azul.html" class="galeria-item">
+      <figure role="listitem" tabindex="0">
+        <img src="https://super.abril.com.br/wp-content/uploads/2025/08/0508-baleia-azul-layout_site.jpg?quality=70&strip=info&w=720&h=440&crop=1" alt="Baleia-azul" />
+        <figcaption>Baleia-azul 🐳</figcaption>
+      </figure>
+    </a>
+
+    <a href="templates/coral_.html" class="galeria-item">
+      <figure role="listitem" tabindex="0">
+        <img src="https://mediasvc.eurekalert.org/Api/v1/Multimedia/5a48d944-45c6-4aca-9815-e46c32407148/Rendition/low-res/Content/Public" alt="Corais" />
+        <figcaption>Coral ♨</figcaption>
+      </figure>
+    </a>
+
+    <a href="templates/tartaruga-de-pente.html" class="galeria-item">
+      <figure role="listitem" tabindex="0">
+        <img src="https://img.freepik.com/fotos-premium/tartaruga-de-pente-especie-cr-tartaruga-de-pente-eretmochelys-imbricata-tartarugas-marinhas_773030-2.jpg" alt="Tartaruga-de-pente" />
+        <figcaption>Tartaruga-de-Pente 🐢</figcaption>
+      </figure>
+    </a>
+
+    <a href="templates/vaquita.html" class="galeria-item">
+      <figure role="listitem" tabindex="0">
+        <img src="https://oceangeneration.org/wp-content/uploads/2023/07/meet-the-vaquita-the-most-endangered-marine-mammal.png" alt="Vaquita" />
+        <figcaption>Vaquita 🐬</figcaption>
+      </figure>
+    </a>
+
+  </div>
+</section>
+
+
+    <!-- FAQ -->
+    <section id="faq" class="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">Perguntas Frequentes</h2>
+
+      <details>
+        <summary>Como a IA ajuda na identificação de espécies?</summary>
+        <p>Através de modelos de visão computacional treinados com imagens rotuladas, a IA propõe classificações que depois são validadas por especialistas.</p>
+      </details>
+
+      <details>
+        <summary>O reconhecimento facial é usado em animais?</summary>
+        <p>Algumas espécies permitem identificação individual por padrões (p.ex. manchas ou desenhos) — a expressão "reconhecimento facial" aqui refere-se a identificação de indivíduos/espécies em imagens.</p>
+      </details>
+
+      <details>
+        <summary> O que é Point Nemo?</summary>
+        <p>É um lugar chamdo e Point Nemo por ser conhecido como o "ponto mais distante de qualquer terra"- é tão isolado que até pedaços de satélites caem lá.</p>
+      </details>
+      <details>
+
+        <summary> O oceano cobre a maior parte do planeta</summary>
+        <p>Cerca de 71% da superfície da Terra é coberta por oceanos — mas mesmo assim, conhecemos menos do fundo do mar do que da superfície da Lua.</p>
+      </details>
+      
+    </section>
+
+    <!-- CALL-TO-ACTION FINAL -->
+    <section class="cta-final" aria-label="Chamada para ação">
+      <div>
+        <strong>Quer se aprofundar?</strong>
+        <div style="color:var(--muted)">Explore materiais, manuais de campo e datasets coletados pelos alunos.</div>
+      </div>
+
+      <div style="display:flex;gap:8px;align-items:center">
+        <a href="#fatos" role="link">Aprenda mais</a>
+        <!-- TODO: para "Baixar material" substituir href por link real para arquivo / download -->
+        <a href="#galeria" role="link" style="background:#0a9; padding:10px 14px; border-radius:10px; color:#fff; text-decoration:none">Baixar material</a>
+      </div>
+    </section>
+
+    <!-- CRÉDITOS / FONTES -->
+    <aside aria-labelledby="fontes-title" style="margin-top:18px; padding:14px; border-radius:10px; background:var(--card); box-shadow:var(--shadow)">
+      <h3 id="fontes-title">Créditos & Fontes</h3>
+      <p style="margin:6px 0">Instituto Chico Mendes de Conservação da Biodiversidade (ICMBio)</p>
+      <p style="margin:6px 0">Ocean Generation — informações sobre espécies ameaçadas</p>
+      <p style="margin:6px 0">National Oceanic and Atmospheric Administration (NOAA) — ciência oceânica</p>
+    </aside>
+
+<!-- Chatbot -->
+
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+<df-messenger
+  intent="WELCOME"
+  chat-title="ECOBOT"
+  agent-id="6c106d6c-eef7-41db-92b4-5bf82848937e"
+  language-code="pt-br">
+</df-messenger>
+
+
+    <footer>
+      <div id="rodapeText">© <span id="anoAtual"></span> Missão Coral.Produzido por: Heloise Vitória Moura Araújo.</div>
+      <div style="margin-top:6px">
+        <a href="#hero-title" class="top-link">Voltar ao topo ↑</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // ====== Inicialização simples ======
+    (function(){
+      // aplicar preferencia de tema do sistema como default
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if(prefersDark) document.documentElement.classList.add('dark');
+      // set year
+      document.getElementById('anoAtual').textContent = new Date().getFullYear();
+
+      // accessibility: keyboard focus outline visible for keyboard users
+      function handleFirstTab(e) {
+        if(e.key === 'Tab'){
+          document.body.classList.add('user-is-tabbing');
+          window.removeEventListener('keydown', handleFirstTab);
+        }
+      }
+      window.addEventListener('keydown', handleFirstTab);
+    })();
+
+    // ====== Theme toggle ======
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      themeToggle.setAttribute('aria-pressed', String(isDark));
+      // TODO: salvar preferência no localStorage se desejar persistir
+    });
+
+    // ====== Acessibilidade extra: foco visível em cliques de teclado ======
+    (function(){
+      // realce de foco somente quando navegado por teclado (simples)
+      document.addEventListener('mousedown', ()=> document.body.classList.remove('user-is-tabbing'));
+      document.addEventListener('keydown', (e)=> { if(e.key === 'Tab') document.body.classList.add('user-is-tabbing') });
+    })();
+
+    // ====== Pequenas melhorias de interação: permitir abrir imagens em nova aba ======
+    document.querySelectorAll('figure img').forEach(img=>{
+      img.style.cursor = 'zoom-in';
+      img.addEventListener('click', ()=> {
+        // abre a imagem em nova aba para visualização — sem backend
+        window.open(img.src, '_blank', 'noopener');
+      });
+    });
+
+    // ====== Helpers para devs/alunos ======
+    // TODO: substituir placeholders [[URL_IMAGEM_*]] e [[URL_IMAGEM_HERO]] e [[FONTES_REFERENCIAS]] por dados reais.
+  </script>
+
+   <!-- Modal da câmera (inicialmente escondido) -->
+  <div id="cameraModal" class="modal" aria-hidden="true" style="display:none;">
+    <div class="modal-content">
+      <button id="fecharModal" class="botao-fechar" title="Fechar">❌</button>
+      <h2 class="modal-title">Reconhecimento Facial</h2>
+      <div class="video-wrap">
+        <video id="video" autoplay muted playsinline></video>
+      </div>
+      <div class="controls">
+        <button id="tirarFoto" class="botao-foto" title="Tirar foto">📸</button>
+      </div>
+      <p id="modalStatus" class="modal-status">Aguardando...</p>
+      <canvas id="fotoCanvas" style="display:none;"></canvas>
+    </div>
+  </div>
+   <!-- Script principal -->
+  <script defer src="script.js"></script>
+</body>
+</html>
